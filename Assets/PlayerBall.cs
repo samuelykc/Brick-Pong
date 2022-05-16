@@ -23,7 +23,7 @@ public class PlayerBall : MonoBehaviour
 
 
     private Vector3 lastVelocity;
-    private void Update()
+    private void FixedUpdate()
     {
         lastVelocity = body.velocity;
     }
