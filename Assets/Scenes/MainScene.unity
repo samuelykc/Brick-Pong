@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 359492428}
   - component: {fileID: 359492427}
   - component: {fileID: 359492426}
+  - component: {fileID: 359492430}
   m_Layer: 6
   m_Name: CollectionArea
   m_TagString: Untagged
@@ -247,13 +248,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359492425}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -20, z: 0}
+  m_LocalPosition: {x: 0, y: -24, z: 0}
   m_LocalScale: {x: 30, y: 8, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &359492430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359492425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a05dd65ef4ca024f88fe468a057b232, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ball: {fileID: 804009208}
 --- !u!1 &400142077
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,11 +429,6 @@ MonoBehaviour:
   levelMaker: {fileID: 669849775}
   level: 1
   ball: {fileID: 804009208}
-  bar: {fileID: 1486885201}
-  ballSpeed: 20
-  barSpeed: 0.15
-  barMinX: -11.5
-  barMaxX: 11.5
 --- !u!4 &669849774
 Transform:
   m_ObjectHideFlags: 0
@@ -491,46 +500,74 @@ MonoBehaviour:
     - pos: {x: 12, y: 22, z: 0}
       type: 2
     - pos: {x: -12, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: -8, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: -4, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: 0, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: 4, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: 8, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: 12, y: 20, z: 0}
-      type: 1
+      type: 2
     - pos: {x: -12, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: -8, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: -4, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 0, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 4, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 8, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 12, y: 18, z: 0}
-      type: 0
+      type: 1
     - pos: {x: -12, y: 16, z: 0}
-      type: 0
+      type: 1
     - pos: {x: -8, y: 16, z: 0}
-      type: 0
+      type: 1
     - pos: {x: -4, y: 16, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 0, y: 16, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 4, y: 16, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 8, y: 16, z: 0}
-      type: 0
+      type: 1
     - pos: {x: 12, y: 16, z: 0}
+      type: 1
+    - pos: {x: -12, y: 14, z: 0}
+      type: 0
+    - pos: {x: -8, y: 14, z: 0}
+      type: 0
+    - pos: {x: -4, y: 14, z: 0}
+      type: 0
+    - pos: {x: 0, y: 14, z: 0}
+      type: 0
+    - pos: {x: 4, y: 14, z: 0}
+      type: 0
+    - pos: {x: 8, y: 14, z: 0}
+      type: 0
+    - pos: {x: 12, y: 14, z: 0}
+      type: 0
+    - pos: {x: -12, y: 12, z: 0}
+      type: 0
+    - pos: {x: -8, y: 12, z: 0}
+      type: 0
+    - pos: {x: -4, y: 12, z: 0}
+      type: 0
+    - pos: {x: 0, y: 12, z: 0}
+      type: 0
+    - pos: {x: 4, y: 12, z: 0}
+      type: 0
+    - pos: {x: 8, y: 12, z: 0}
+      type: 0
+    - pos: {x: 12, y: 12, z: 0}
       type: 0
   bricks:
   - type: 0
@@ -765,8 +802,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08fa10033fd68a347b9cbd4d9cd3aeb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bar: {fileID: 0}
+  bar: {fileID: 1486885202}
   body: {fileID: 804009207}
+  speed: 20
+  servingPos: {x: 0, y: 1, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,6 +1038,7 @@ GameObject:
   - component: {fileID: 1486885200}
   - component: {fileID: 1486885199}
   - component: {fileID: 1486885198}
+  - component: {fileID: 1486885202}
   m_Layer: 7
   m_Name: Bar
   m_TagString: Player
@@ -1086,6 +1126,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1486885202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486885197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d539ff971e090b345b1e3e138ae2477c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  barSpeed: 0.5
+  barMinX: -11.5
+  barMaxX: 11.5
+  bar: {fileID: 1486885201}
 --- !u!1 &1626459514
 GameObject:
   m_ObjectHideFlags: 0

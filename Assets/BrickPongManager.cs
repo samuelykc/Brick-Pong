@@ -4,41 +4,61 @@ using UnityEngine;
 
 public class BrickPongManager : MonoBehaviour
 {
+    #region SINGLETON PATTERN
+    private static BrickPongManager _instance;
+    public static BrickPongManager instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<BrickPongManager>();
+
+                if (_instance == null)
+                {
+                    GameObject container = new GameObject("BrickPongManager");
+                    _instance = container.AddComponent<BrickPongManager>();
+                }
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
+
+
     [SerializeField] private LevelMaker levelMaker;
     [SerializeField] private int level = 0;
 
     [SerializeField] private PlayerBall ball;
-    [SerializeField] private Transform bar;
 
-    [SerializeField] private float ballSpeed = 20f;
 
-    [SerializeField] private float barSpeed = 0.15f;
-    [SerializeField] private float barMinX, barMaxX;
+
+    private enum GameState
+    {
+        preparation, serving, playing, finished
+    }
+    private GameState currentState = GameState.serving;
 
 
     private void Awake()
     {
         levelMaker.InitializeLevel(level);
     }
+
     private void Update()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if(Input.GetKey(KeyCode.Space) && currentState==GameState.serving)
         {
-            ball.ApplyInitialVelocity(ballSpeed);
+            ball.ApplyInitialVelocity();
+            currentState = GameState.playing;
         }
     }
 
-    private void FixedUpdate()
+
+    public void BallOutbound()
     {
-        if(Input.GetKey(KeyCode.LeftArrow))
-        {
-            bar.position = new Vector3(Mathf.Max(bar.position.x-barSpeed, barMinX), bar.position.y);
-        }
-        else if(Input.GetKey(KeyCode.RightArrow))
-        {
-            bar.position = new Vector3(Mathf.Min(bar.position.x+barSpeed, barMaxX), bar.position.y);
-        }
-
+        ball.ResetBall();
+        currentState = GameState.serving;
     }
-
 }
