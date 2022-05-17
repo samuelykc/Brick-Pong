@@ -95,10 +95,15 @@ public class BrickPongManager : MonoBehaviour
 
     public static readonly Dictionary<Brick.Type, int> brickScores = new Dictionary<Brick.Type, int>()
     {
+        //breakables
         { Brick.Type.clay, 100 },
         { Brick.Type.clayBlue, 200 },
         { Brick.Type.clayRed, 300 },
-        { Brick.Type.metal, 500 }
+        { Brick.Type.hardenedClay, 400 },
+
+        //unbreakables
+        { Brick.Type.metal, 0 },
+        { Brick.Type.rebouncer, 0 }
     };
     private const int comboScore = 10;
 

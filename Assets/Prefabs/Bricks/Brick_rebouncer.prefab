@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3313863463323132220}
   - component: {fileID: 6029424417763917608}
   m_Layer: 7
-  m_Name: Brick_clayBlue
+  m_Name: Brick_rebouncer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a69ae48a7ae78f949a4582cee63ec958, type: 2}
+  - {fileID: 2100000, guid: 2658cf5b2fb99694582afc9a1a7722f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,4 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0a8e6222e55272429942390a58387e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  type: 5
+  requiredHitCount: 2
+  rebouncerAcceleration: 10
