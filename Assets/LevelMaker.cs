@@ -12,6 +12,9 @@ public class LevelMaker : MonoBehaviour
         public class BrickArragement
         {
             public Vector3 pos;
+            public Vector3 rot = Vector3.zero;
+            public Vector3 scale = new Vector3(3, 1, 1);
+
             public Brick.Type type = Brick.Type.clay;
         }
 
@@ -56,7 +59,10 @@ public class LevelMaker : MonoBehaviour
 
         foreach(var brick in levels[level].brickArragements)
         {
-            bricksSpawned.Add(Instantiate(brickDict[brick.type].prefab, brick.pos, Quaternion.identity).GetComponent<Brick>());
+            GameObject instance = Instantiate(brickDict[brick.type].prefab, brick.pos, Quaternion.Euler(brick.rot));
+            instance.transform.localScale = brick.scale;
+
+            bricksSpawned.Add(instance.GetComponent<Brick>());
         }
 
         return bricksSpawned;

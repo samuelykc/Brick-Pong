@@ -7,7 +7,10 @@ public class PlayerBall : MonoBehaviour
 {
     [SerializeField] private PlayerBar bar;
 
+
     [SerializeField] private Rigidbody body;
+    [SerializeField] private AudioSource onHitSFX;
+
     [SerializeField] private float baseSpeed = 20f;
     float speed { get { return baseSpeed + appliedRebouncAcceleration; } }
 
@@ -79,6 +82,10 @@ public class PlayerBall : MonoBehaviour
         {
             BrickPongManager.instance.BarTouched();
         }
+
+
+        //SFX
+        onHitSFX.Play();
     }
 
 
