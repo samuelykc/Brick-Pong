@@ -10,12 +10,17 @@ public class Brick : MonoBehaviour
         metal
     }
 
-    [SerializeField] private Type type = Type.clay;
+    public Type type = Type.clay;
+    public bool isBreakable() { return type != Type.metal; }
 
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        Destroy(gameObject);
+        if(isBreakable())
+        {
+            BrickPongManager.instance.BrickSmashed(this);
+            Destroy(gameObject);
+        }
     }
 }

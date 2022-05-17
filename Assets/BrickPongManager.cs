@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class BrickPongManager : MonoBehaviour
 {
@@ -27,23 +30,42 @@ public class BrickPongManager : MonoBehaviour
     #endregion
 
 
-    [SerializeField] private LevelMaker levelMaker;
-    [SerializeField] private int level = 0;
-
     [SerializeField] private PlayerBall ball;
 
 
+    [Header("Level")]
+    [SerializeField] private LevelMaker levelMaker;
+    [SerializeField] private int level = 0;
 
-    private enum GameState
+    private List<Brick> spawnedBricks = new List<Brick>();
+    private int breakableBrickCount = 0;
+
+
+    [Header("Values")]
+    [SerializeField] private int _life = 3;
+    [SerializeField] private int _score = 0;
+    public int life { get { return _life; } set { _life = value; onLifeChange(value); } }
+    public int score { get { return _score; } set { _score = value; onScoreChange(value); } }
+    public Action<int> onLifeChange;
+    public Action<int> onScoreChange;
+
+
+    public enum GameState
     {
         preparation, serving, playing, finished
     }
-    private GameState currentState = GameState.serving;
+    [SerializeField] private GameState _currentState = GameState.serving;
+    public GameState currentState { get { return _currentState; } set { _currentState = value; onCurrentStateChange(value); } }
+    public Action<GameState> onCurrentStateChange;
 
 
     private void Awake()
     {
-        levelMaker.InitializeLevel(level);
+        spawnedBricks = levelMaker.InitializeLevel(level);
+        breakableBrickCount = spawnedBricks.FindAll((brick) => brick.isBreakable()).Count;
+
+        life = 3;
+        score = 0;
     }
 
     private void Update()
@@ -59,6 +81,42 @@ public class BrickPongManager : MonoBehaviour
     public void BallOutbound()
     {
         ball.ResetBall();
-        currentState = GameState.serving;
+
+        if(currentState == GameState.playing)
+        {
+            currentState = (--life > 0)?
+                           GameState.serving:
+                           GameState.finished;
+        }
+    }
+
+
+
+
+    public static readonly Dictionary<Brick.Type, int> brickScores = new Dictionary<Brick.Type, int>()
+    {
+        { Brick.Type.clay, 100 },
+        { Brick.Type.clayBlue, 200 },
+        { Brick.Type.clayRed, 300 },
+        { Brick.Type.metal, 500 }
+    };
+    private const int comboScore = 10;
+
+    private int combo = 0;
+    public void BrickSmashed(Brick brick)
+    {
+        //count score
+        score += brickScores[brick.type] + (combo++ * comboScore);
+
+        //check game finish
+        if(brick.isBreakable()) breakableBrickCount--;
+        if(breakableBrickCount <= 0)
+        {
+            currentState = GameState.finished;
+        }
+    }
+    public void BarTouched()
+    {
+        combo = 0;
     }
 }

@@ -45,6 +45,10 @@ public class PlayerBall : MonoBehaviour
 
         //TODO: when y velocity is 0, create small y velocity
         //TODO: when y velocity is small & touches the board, create large y velocity
+        if(collision.transform.gameObject == bar.gameObject)
+        {
+            BrickPongManager.instance.BarTouched();
+        }
     }
 
 
