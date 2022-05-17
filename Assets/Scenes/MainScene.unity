@@ -1048,19 +1048,19 @@ MonoBehaviour:
       scale: {x: 28, y: 1, z: 1}
       type: 5
     - pos: {x: -12.5, y: 21, z: 0}
-      rot: {x: 0, y: 0, z: 0}
+      rot: {x: 0, y: 0, z: -24}
       scale: {x: 3, y: 1, z: 1}
       type: 5
     - pos: {x: 12.5, y: 21, z: 0}
-      rot: {x: 0, y: 0, z: 0}
+      rot: {x: 0, y: 0, z: 24}
       scale: {x: 3, y: 1, z: 1}
       type: 5
     - pos: {x: -12.5, y: 6, z: 0}
-      rot: {x: 0, y: 0, z: 0}
+      rot: {x: 0, y: 0, z: -24}
       scale: {x: 3, y: 1, z: 1}
       type: 5
     - pos: {x: 12.5, y: 6, z: 0}
-      rot: {x: 0, y: 0, z: 0}
+      rot: {x: 0, y: 0, z: 24}
       scale: {x: 3, y: 1, z: 1}
       type: 5
   bricks:
