@@ -31,6 +31,7 @@ public class LevelMaker : MonoBehaviour
 
     [Header("LevelSettings")]
     [SerializeField] private List<LevelSettings> levels = new List<LevelSettings>();
+    public int levelCount { get { return levels.Count; } }
 
     
     [Header("BrickSettings")]

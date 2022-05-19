@@ -35,10 +35,13 @@ public class BrickPongManager : MonoBehaviour
 
     [Header("Level")]
     [SerializeField] private LevelMaker levelMaker;
-    [SerializeField] private int level = 0;
+
+    [SerializeField] private int _level = 0;
+    public int level { get { return _level; } set { _level = value; onLevelChange(value); } }
+    public Action<int> onLevelChange;
 
     private List<Brick> spawnedBricks = new List<Brick>();
-    private int breakableBrickCount = 0;
+    public int breakableBrickCount { get; private set; } = 0;
 
 
     [Header("Values")]
@@ -52,28 +55,54 @@ public class BrickPongManager : MonoBehaviour
 
     public enum GameState
     {
-        home, serving, playing, finished
+        home, serving, playing, pausing, finished
     }
-    [SerializeField] private GameState _currentState = GameState.serving;
+    [SerializeField] private GameState _currentState = GameState.home;
     public GameState currentState { get { return _currentState; } set { _currentState = value; onCurrentStateChange(value); } }
     public Action<GameState> onCurrentStateChange;
 
 
+
     private void Awake()
     {
-        spawnedBricks = levelMaker.InitializeLevel(level);
-        breakableBrickCount = spawnedBricks.FindAll((brick) => brick.isBreakable()).Count;
-
-        life = 3;
-        score = 0;
+        MakeLevel();
     }
-
     private void FixedUpdate()
     {
         if(Input.GetKey(KeyCode.Space)) ServeBall();
     }
 
 
+
+
+
+    //--------------------- UI Components Messages ---------------------
+    public void ClearLevel()
+    {
+        foreach(Brick b in spawnedBricks) Destroy(b.gameObject);
+        spawnedBricks.Clear();
+    }
+    public void MakeLevel()
+    {
+        spawnedBricks = levelMaker.InitializeLevel(level);
+    }
+
+    public void PreviousLevel()
+    {
+        if(levelMaker.levelCount <= 1) return;  //skip logic if no choice
+
+        ClearLevel();
+        if(--level < 0) level = levelMaker.levelCount-1;
+        MakeLevel();
+    }
+    public void NextLevel()
+    {
+        if(levelMaker.levelCount <= 1) return;  //skip logic if no choice
+
+        ClearLevel();
+        if(++level >= levelMaker.levelCount) level = 0;
+        MakeLevel();
+    }
 
     public void ServeBall()
     {
@@ -84,7 +113,54 @@ public class BrickPongManager : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        breakableBrickCount = spawnedBricks.FindAll((brick) => brick.isBreakable()).Count;
 
+        life = 3;
+        score = 0;
+
+        currentState = GameState.serving;
+    }
+    private GameState stateWhenPaused;
+    public void PauseGame()
+    {
+        if(currentState!=GameState.serving && currentState!=GameState.playing) return;
+
+        Time.timeScale = 0;
+        stateWhenPaused = currentState;
+
+        currentState = GameState.pausing;
+    }
+    public void ResumeGame()
+    {
+        if(currentState!=GameState.pausing) return;
+
+        Time.timeScale = 1;
+
+        currentState = stateWhenPaused;
+    }
+    public void AbandonGame()
+    {
+        currentState = GameState.finished;
+
+        ball.ResetBall();
+
+        Time.timeScale = 1;
+    }
+    public void ReturnHome()
+    {
+        life = 3;
+        score = 0;
+
+        currentState = GameState.home;
+    }
+
+
+
+
+
+    //--------------------- Game Components Messages ---------------------
     public void BallOutbound()
     {
         ball.ResetBall();
@@ -96,9 +172,6 @@ public class BrickPongManager : MonoBehaviour
                            GameState.finished;
         }
     }
-
-
-
 
     public static readonly Dictionary<Brick.Type, int> brickScores = new Dictionary<Brick.Type, int>()
     {
@@ -126,6 +199,10 @@ public class BrickPongManager : MonoBehaviour
         {
             currentState = GameState.finished;
         }
+
+        //remove GO
+        spawnedBricks.Remove(brick);
+        Destroy(brick.gameObject);
     }
     public void BarTouched()
     {

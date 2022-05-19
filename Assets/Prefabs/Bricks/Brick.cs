@@ -31,7 +31,6 @@ public class Brick : MonoBehaviour
             if(type==Type.hardenedClay && hitCount<requiredHitCount) return;
 
             BrickPongManager.instance.BrickSmashed(this);
-            Destroy(gameObject);
         }
     }
 }
