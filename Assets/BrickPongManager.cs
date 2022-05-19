@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class BrickPongManager : MonoBehaviour
 {
@@ -31,6 +29,7 @@ public class BrickPongManager : MonoBehaviour
 
 
     [SerializeField] private PlayerBall ball;
+    [SerializeField] private PlayerBar bar;
 
 
     [Header("Level")]
@@ -42,6 +41,16 @@ public class BrickPongManager : MonoBehaviour
 
     private List<Brick> spawnedBricks = new List<Brick>();
     public int breakableBrickCount { get; private set; } = 0;
+
+
+    [Header("Settings")]
+    [SerializeField] private int livesPerGame = 3;
+    [SerializeField] private float powerUpDuration = 20f;
+
+    [SerializeField] private float fieldWidth = 28;
+    [SerializeField] private float playerBarLength = 5f, playerBarLengthExtended = 7.5f;
+
+    [SerializeField] private float playerBarSpeed = 0.5f, playerBarSpeedQuick = 1f;
 
 
     [Header("Values")]
@@ -76,7 +85,7 @@ public class BrickPongManager : MonoBehaviour
 
 
 
-    //--------------------- UI Components Messages ---------------------
+    //==================================== UI Components Messages ====================================
     public void ClearLevel()
     {
         foreach(Brick b in spawnedBricks) Destroy(b.gameObject);
@@ -117,8 +126,13 @@ public class BrickPongManager : MonoBehaviour
     {
         breakableBrickCount = spawnedBricks.FindAll((brick) => brick.isBreakable()).Count;
 
-        life = 3;
+        life = livesPerGame;
         score = 0;
+
+        ball.ResetBall();
+
+        SetPlayerBarLength(false);
+        SetPlayerBarSpeed();
 
         currentState = GameState.serving;
     }
@@ -150,8 +164,10 @@ public class BrickPongManager : MonoBehaviour
     }
     public void ReturnHome()
     {
-        life = 3;
+        life = livesPerGame;
         score = 0;
+
+        ball.ResetBall();
 
         currentState = GameState.home;
     }
@@ -160,7 +176,8 @@ public class BrickPongManager : MonoBehaviour
 
 
 
-    //--------------------- Game Components Messages ---------------------
+    //==================================== Game Components Messages ====================================
+    //------------------- CollectionArea -------------------
     public void BallOutbound()
     {
         ball.ResetBall();
@@ -173,6 +190,13 @@ public class BrickPongManager : MonoBehaviour
         }
     }
 
+    //------------------- Ball -------------------
+    public void BarTouched()
+    {
+        combo = 0;
+    }
+
+    //------------------- Brick -------------------
     public static readonly Dictionary<Brick.Type, int> brickScores = new Dictionary<Brick.Type, int>()
     {
         //breakables
@@ -200,12 +224,68 @@ public class BrickPongManager : MonoBehaviour
             currentState = GameState.finished;
         }
 
+        //spawn PowerUp
+        foreach(PowerUp.Type powerUp in brick.containingPowerUps)
+        {
+            GameObject prefab = Resources.Load("PowerUp_" + powerUp) as GameObject;
+            if(prefab!=null) Instantiate(prefab, brick.transform.position, Quaternion.identity);
+        }
+
         //remove GO
         spawnedBricks.Remove(brick);
         Destroy(brick.gameObject);
     }
-    public void BarTouched()
+
+    //------------------- PowerUp -------------------
+    public void PowerUpObtained(PowerUp powerUp)
     {
-        combo = 0;
+        switch(powerUp.type)
+        {
+            case PowerUp.Type.extendedBar:
+                SetPlayerBarLength(true);
+                break;
+
+            case PowerUp.Type.quickerBar:
+                SetPlayerBarSpeed(true);
+                break;
+
+            case PowerUp.Type.extraBall:
+                break;
+
+            default:
+                break;
+        }
+
+        //remove GO
+        Destroy(powerUp.gameObject);
+    }
+    
+    private void SetPlayerBarLength(bool extend = false)
+    {
+        StopCoroutine(PowerUpEnd_extendedBar());
+
+        bar.SetLength(extend? playerBarLengthExtended: playerBarLength,
+                      fieldWidth);
+
+        if(extend) StartCoroutine(PowerUpEnd_extendedBar());
+    }
+    private IEnumerator PowerUpEnd_extendedBar()
+    {
+        yield return new WaitForSeconds(powerUpDuration);
+        SetPlayerBarLength();
+    }
+
+    private void SetPlayerBarSpeed(bool quick = false)
+    {
+        StopCoroutine(PowerUpEnd_quickerBar());
+
+        bar.SetSpeed(quick? playerBarSpeedQuick: playerBarSpeed);
+
+        if(quick) StartCoroutine(PowerUpEnd_quickerBar());
+    }
+    private IEnumerator PowerUpEnd_quickerBar()
+    {
+        yield return new WaitForSeconds(powerUpDuration);
+        SetPlayerBarSpeed();
     }
 }

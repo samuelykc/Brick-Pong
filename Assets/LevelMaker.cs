@@ -18,7 +18,15 @@ public class LevelMaker : MonoBehaviour
             public Brick.Type type = Brick.Type.clay;
         }
 
+        [Serializable]
+        public class PowerUpArragement
+        {
+            public int attachedBrick;   //index of brick in brickArragements, -1 if random
+            public PowerUp.Type type;
+        }
+
         public List<BrickArragement> brickArragements = new List<BrickArragement>();
+        public List<PowerUpArragement> powerUpArragements = new List<PowerUpArragement>();
     }
 
     [Serializable]
@@ -57,13 +65,41 @@ public class LevelMaker : MonoBehaviour
     public List<Brick> InitializeLevel(int level)
     {
         List<Brick> bricksSpawned = new List<Brick>();
+        List<Brick> bricksSpawned_breakable = new List<Brick>();
 
-        foreach(var brick in levels[level].brickArragements)
+        //spawn bricks
+        foreach (var brick in levels[level].brickArragements)
         {
             GameObject instance = Instantiate(brickDict[brick.type].prefab, brick.pos, Quaternion.Euler(brick.rot));
             instance.transform.localScale = brick.scale;
 
-            bricksSpawned.Add(instance.GetComponent<Brick>());
+            Brick brickScript = instance.GetComponent<Brick>();
+            bricksSpawned.Add(brickScript);
+            if(brickScript.isBreakable()) bricksSpawned_breakable.Add(brickScript);
+        }
+
+        //add fixed power ups
+        foreach(var powerUp in levels[level].powerUpArragements)
+        {
+            if(powerUp.attachedBrick>=0 && powerUp.attachedBrick<bricksSpawned_breakable.Count)
+            {
+                Brick targetBrick = bricksSpawned_breakable[powerUp.attachedBrick];
+                targetBrick.containingPowerUps.Add(powerUp.type);
+
+                bricksSpawned_breakable.Remove(targetBrick);
+            }
+        }
+
+        //add random power ups
+        foreach(var powerUp in levels[level].powerUpArragements)
+        {
+            if(powerUp.attachedBrick==-1 && bricksSpawned_breakable.Count>0)
+            {
+                Brick targetBrick = bricksSpawned_breakable[UnityEngine.Random.Range(0, bricksSpawned_breakable.Count - 1)];    //target random brick may not contain any other power up beforehand
+                targetBrick.containingPowerUps.Add(powerUp.type);
+
+                bricksSpawned_breakable.Remove(targetBrick);
+            }
         }
 
         return bricksSpawned;

@@ -12,6 +12,8 @@ public class Brick : MonoBehaviour
     }
 
     public Type type = Type.clay;
+    public List<PowerUp.Type> containingPowerUps = new List<PowerUp.Type>();
+
     public int hitCount { get; private set; } = 0;
 
 
