@@ -7,9 +7,14 @@ using TMPro;
 
 public class BrickPongManagerUI : MonoBehaviour
 {
+    [Header("Game Playing")]
     public TextMeshProUGUI lifeText;
     public TextMeshProUGUI scoreText;
 
+    public Button ballServeBtn;
+
+    [Header("Game Finished")]
+    public Canvas gameFinishedCanvas;
     public TextMeshProUGUI stageClearedText;
     public TextMeshProUGUI gameOverText;
 
@@ -42,7 +47,10 @@ public class BrickPongManagerUI : MonoBehaviour
 
     public void OnCurrentStateChange(BrickPongManager.GameState state)
     {
-        stageClearedText.gameObject.SetActive(state == BrickPongManager.GameState.finished && BrickPongManager.instance.life>0);
-        gameOverText.gameObject.SetActive(state == BrickPongManager.GameState.finished && BrickPongManager.instance.life<=0);
+        gameFinishedCanvas.enabled = (state == BrickPongManager.GameState.finished);
+        stageClearedText.enabled = (BrickPongManager.instance.life > 0);
+        gameOverText.enabled = (BrickPongManager.instance.life <= 0);
+
+        ballServeBtn.gameObject.SetActive(state == BrickPongManager.GameState.serving);
     }
 }

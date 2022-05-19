@@ -52,7 +52,7 @@ public class BrickPongManager : MonoBehaviour
 
     public enum GameState
     {
-        preparation, serving, playing, finished
+        home, serving, playing, finished
     }
     [SerializeField] private GameState _currentState = GameState.serving;
     public GameState currentState { get { return _currentState; } set { _currentState = value; onCurrentStateChange(value); } }
@@ -68,9 +68,16 @@ public class BrickPongManager : MonoBehaviour
         score = 0;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if(Input.GetKey(KeyCode.Space) && currentState==GameState.serving)
+        if(Input.GetKey(KeyCode.Space)) ServeBall();
+    }
+
+
+
+    public void ServeBall()
+    {
+        if(currentState==GameState.serving)
         {
             ball.ApplyInitialVelocity();
             currentState = GameState.playing;
