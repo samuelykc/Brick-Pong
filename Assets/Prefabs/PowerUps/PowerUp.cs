@@ -7,10 +7,28 @@ public class PowerUp : MonoBehaviour
     public enum Type
     {
         extendedBar, quickerBar,
-        extraBall
+        extraBall   //not in use
     }
 
     public Type type = Type.extendedBar;
+
+
+    private void Awake()
+    {
+        BrickPongManager.instance.onCurrentStateChange += OnCurrentStateChange;
+
+        OnCurrentStateChange(BrickPongManager.instance.currentState);
+    }
+    private void OnDestroy()
+    {
+        BrickPongManager.instance.onCurrentStateChange -= OnCurrentStateChange;
+    }
+
+
+    public void OnCurrentStateChange(BrickPongManager.GameState state)
+    {
+        if(state == BrickPongManager.GameState.finished) Destroy(gameObject);   //self deletion if game finished
+    }
 
 
     private const float deletionYPos = -100f;
