@@ -2261,7 +2261,11 @@ MonoBehaviour:
       rot: {x: 0, y: 0, z: 24}
       scale: {x: 3, y: 1, z: 1}
       type: 5
-    powerUpArragements: []
+    powerUpArragements:
+    - attachedBrick: 11
+      type: 0
+    - attachedBrick: 12
+      type: 0
   bricks:
   - type: 0
     prefab: {fileID: 7782075879700920039, guid: c735df6c848ec7d4f81620085b254713, type: 3}
@@ -4380,6 +4384,30 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 669849773}
+        m_TargetAssemblyTypeName: BrickPongManager, Assembly-CSharp
+        m_MethodName: ClearLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 669849773}
+        m_TargetAssemblyTypeName: BrickPongManager, Assembly-CSharp
+        m_MethodName: MakeLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 669849773}
         m_TargetAssemblyTypeName: BrickPongManager, Assembly-CSharp
         m_MethodName: ReturnHome

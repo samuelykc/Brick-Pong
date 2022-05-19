@@ -21,7 +21,7 @@ public class LevelMaker : MonoBehaviour
         [Serializable]
         public class PowerUpArragement
         {
-            public int attachedBrick;   //index of brick in brickArragements, -1 if random
+            public int attachedBrick = -1;  //index of brick in brickArragements, -1 if random
             public PowerUp.Type type;
         }
 
@@ -81,9 +81,9 @@ public class LevelMaker : MonoBehaviour
         //add fixed power ups
         foreach(var powerUp in levels[level].powerUpArragements)
         {
-            if(powerUp.attachedBrick>=0 && powerUp.attachedBrick<bricksSpawned_breakable.Count)
+            if(powerUp.attachedBrick>=0 && powerUp.attachedBrick<bricksSpawned.Count)
             {
-                Brick targetBrick = bricksSpawned_breakable[powerUp.attachedBrick];
+                Brick targetBrick = bricksSpawned[powerUp.attachedBrick];
                 targetBrick.containingPowerUps.Add(powerUp.type);
 
                 bricksSpawned_breakable.Remove(targetBrick);
